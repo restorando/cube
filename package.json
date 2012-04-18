@@ -13,6 +13,8 @@
     "pegjs": "0.6.2",
     "vows": "0.5.11",
     "websocket": "1.0.2",
-    "websocket-server": "1.4.04"
+    "websocket-server": "1.4.04",
+    "cookies": "0.2.2",
+    "bcrypt": "0.5.0"
   }
 }
