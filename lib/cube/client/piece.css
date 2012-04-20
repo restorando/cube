@@ -4,16 +4,98 @@
   font-size: 12px;
 }
 
-.view .piece {
-  font: 10px sans-serif;
-  padding: 4px 4px 3px 3px;
+&.show {
+  .piece {
+    font: 10px sans-serif;
+    h2 { font-size: 24px; }
+    h3 {
+      font-size: 16px;
+      line-height: 1em;
+      margin: 0px;
+    }
+    &.sum {
+      text-align: center;
+      .header{
+        position: absolute;
+        bottom: 0px;
+        width: 100%;
+        margin: 3px 0px 0px;
+      }
+    }
+    &:not(.area) { font-size: 14px; }
+  }
 }
 
-.edit .piece {
+&.edit .piece {
   background: #eee;
   border: solid 2px #ccc;
   border-radius: 4px;
-  margin: -2px 0 0 -2px;
+  padding: 3px;
+  h3 {
+    pointer-events: none;
+    font-size: 14px;
+    line-height: 20px;
+    margin: 0;
+    float: left;
+  }
+  textarea, input {
+    @include border-radius(4px);
+    padding: 2px 4px;
+    line-height: 14px;
+    height: auto;
+    border: solid 1px #ccc;
+    font-size: 12px;
+    resize: none;
+  }
+  & > .header {
+    height: 20px;
+    margin-bottom: 3px;
+    overflow: hidden;
+    text-align: right;
+    
+    .advanced { 
+      float: right;
+      margin-left: 3px;
+      cursor: pointer;
+      width: 20px;
+      height: 20px;
+      display: block;
+      background: url(image_path('gear.png')) 50% 50% no-repeat;
+    }
+    input.title {
+      width: auto;
+      min-width: 10px;
+    }
+  }
+  .content {
+    textarea {
+      height: 100%;
+      box-sizing: border-box;
+    }
+  }
+
+  .time {
+    margin-top: 3px;
+    line-height: 20px;
+    height: 20px;
+    overflow: hidden;
+    text-align: right;
+    div { float: left; margin-right: 4px; }
+    > input {
+      min-width: 10px;
+      width: auto;
+    }
+    select {
+      max-width: 30%;
+      min-width: 20px;
+      margin-left: 4px;
+      float: right;
+      height: 20px;
+      border-radius: 4px;
+      border: solid 1px #ccc;
+      &:focus { outline: none; }
+    }
+  }
 }
 
 .piece:focus, .piece.active {
@@ -23,41 +105,41 @@
   background-color: #e7e7e7;
 }
 
-.piece h3 {
-  pointer-events: none;
-  font-size: 14px;
-  margin: 4px;
+.piece > .content > * {
+  width: 100%;
 }
 
-.piece textarea, .piece input {
-  margin-left: 4px;
-  height: 20px;
-  border-radius: 4px;
+
+.piece .content > .advanced {
+  width: 90%;
+  margin: 5px auto 0px auto;
+  
+  padding: 3px;
+  background: #e7e7e7;
+  border-bottom-left-radius: 4px;
+  border-bottom-right-radius: 4px;
   border: solid 1px #ccc;
-  resize: none;
-}
-
-.piece .time {
-  margin-top: 1px;
-  margin-left: 4px;
-  line-height: 20px;
-}
-
-.piece input {
-  height: 16px;
-  width: 88px;
-}
-
-.piece select {
-  margin-right: 4px;
-  float: right;
-  height: 20px;
-  border-radius: 4px;
-  border: solid 1px #ccc;
-}
-
-.view .piece.sum, .view .piece.text, .view .piece.htmlbox {
-  text-align: right;
+  display: none;
+  
+  h3 {
+    float: none;
+    margin-bottom: 5px;
+    margin-left: 3px;
+  }
+  div {
+    margin-left: 15px;
+    margin-top: 3px;
+    min-height: 20px;
+    position: relative;
+    line-height: 20px;
+  }
+  input {
+    position: absolute;
+    left: 30%;
+    width: 70%;
+    box-sizing: border-box;
+    height: 20px;
+  }
 }
 
 .resize {
@@ -117,11 +199,11 @@
   cursor: nesw-resize;
 }
 
-.area path.area {
+.area-graph path.area {
   fill: #e7e7e7;
 }
 
-.area path.line {
+.area-graph path.line {
   fill: none;
   stroke: #666;
 }
@@ -135,10 +217,11 @@
 }
 
 .x.axis .domain {
-  stroke: #000;
+  stroke: #999;
 }
 
 .x.axis line {
+  display: none;
   stroke: #fff;
 }
 
@@ -148,4 +231,10 @@
 
 .y.axis line {
   stroke: #eee;
+}
+
+.legend {
+  font-size: 12px;
+  line-height: 12px;
+  rect { stroke: #666; }
 }
