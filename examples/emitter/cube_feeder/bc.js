@@ -1,6 +1,6 @@
 var util = require("util"),
     emitter = require("../../../lib/cube/server/emitter"),
-    options = require("./bc-config");
+    options = require("./config");
 
 // Connect to websocket.
 util.log("starting websocket client");
