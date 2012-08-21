@@ -6,5 +6,6 @@ module.exports = {
   "twitter"  : {
     "username": process.env.TWITTER_USERNAME || "USERNAME",
     "password": process.env.TWITTER_PASSWORD || "PASSWORD"
-  }
+  },
+  "randomize_time": [0, 1000 * 60 * 60 * 24]
 };
