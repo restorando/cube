@@ -11,6 +11,12 @@ module.exports = {
   },
   "warmer": {
     "interval": 1000 * 60, // 1 minute
-    "tier":     1000 * 60 * 60 * 24 // 1 day
+    "tier"    : 1000 * 60 * 60 * 24 // 1 day
+  },
+  "metrics": {
+    "horizons": {
+      "calculation":  1000 * 60 * 60 * 2, // 2 hours
+      "invalidation": 1000 * 60 * 60 * 1  // 1 hour
+    }
   }
 };
