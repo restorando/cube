@@ -34,7 +34,7 @@ function process(line){
     try {
       var data = JSON.parse(line);
     } catch(e) {
-      util.log("Bad line:\t" + line);
+      util.log("Bad line:\t" + line); return;
     }
     if(!data.text) return;
     // turn the tweet into the thing you would send to cube if you got to design a tweet for dashboard display.
@@ -52,7 +52,7 @@ function process(line){
     } else {
       emit({type: "tweet", time: time, data: data});
     }
-    emit({type: "twitter_user", time: new Date(data.user.created_at), data: data.user});
+    //emit({type: "twitter_user", time: new Date(data.user.created_at), data: data.user});
   }
 }
 
