@@ -8,5 +8,9 @@ module.exports = {
   "server": {
     "port": 1080,
     "authenticate": false
+  },
+  "collections": {
+    "metrics": { "ephemeral": true },
+    "events": { "capped": 1e7 }
   }
 };
