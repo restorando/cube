@@ -97,6 +97,7 @@
         var i = -1;
         while (++i < n) {
           o = o[fields[i]];
+          if(typeof o === 'undefined') return;
         }
         return o;
       }
