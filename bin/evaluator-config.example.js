@@ -10,6 +10,7 @@ module.exports = {
     "authenticate": true
   },
   "warmer": {
-    "interval": 30 * 1000 // 30 seconds
+    "interval": 1000 * 60, // 1 minute
+    "tier":     1000 * 60 * 60 * 24 // 1 day
   }
 };
