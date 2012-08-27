@@ -37,15 +37,12 @@ function process(line){
       util.log("Bad line:\t" + line); return;
     }
     if(!data.text) return;
-    // turn the tweet into the thing you would send to cube if you got to design a tweet for dashboard display.
-    // some possibly foolish ideas include:
-    // * source -> top 5 or 'other'
-    // * hashtag count
-    // * 10**((log10(followers_count) / 3.0).round)
     
-    if(randomize_time){
-      var time_offset = Math.floor(Math.random() * (randomize_time[1] - randomize_time[0])) + randomize_time[0]; 
+    if (randomize_time && (Math.random() < 25)){
+      var frac = Math.abs(1.0 - (Math.random() + Math.random()));
+      var time_offset = Math.floor(frac * (randomize_time[1] - randomize_time[0])) + randomize_time[0];
     } else { var time_offset = 0; }
+    // util.log('time_offset ' + (time_offset / 3600000));
     var time = new Date(new Date(data.created_at) - time_offset);
     if(data.retweeted_status){ 
       emit({type: "retweet", time: time, data: data});
