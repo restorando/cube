@@ -11,12 +11,20 @@
       filterIn = filter("$in"),
       exists = {$exists: true};
 
-  function add(a, b) { return a + b; }
+  function add(a, b)      { return a + b; }
   function subtract(a, b) { return a - b; }
   function multiply(a, b) { return a * b; }
-  function divide(a, b) { return a / b; }
-
+  function divide(a, b)   { return a / b; }
+  function negate(a)      { return -a;    }
   function one() { return 1; }
+
+  add.aggregate      = function(a, b){ return {$add:      [a, b]}; }
+  subtract.aggregate = function(a, b){ return {$subtract: [a, b]}; }
+  multiply.aggregate = function(a, b){ return {$multiply: [a, b]}; }
+  divide.aggregate   = function(a, b){ return {$divide:   [a, b]}; }
+  negate.aggregate   = function(a)   { return {$multiply: [a, -1]};}
+  one.aggregate      = function()    { return {$add:      [1, 0]}; }
+
   function noop() {}
 
   function filter(op) {
@@ -69,8 +77,23 @@
       value: function(o) {
         var v = head.value(o),
             i = -1,
-            t;
-        while (++i < n) v = (t = tail[i])[1](v, t[3].value(o));
+            t, op;
+        while (++i < n){
+          t  = tail[i],
+          op = t[1],
+          v  = op(v, t[3].value(o));
+        }
+        return v;
+      },
+      aggregate: function() {
+        var v = head.aggregate(),
+            i = -1,
+            t, op;
+        while (++i < n){
+          t  = tail[i],
+          op = t[1].aggregate,
+          v  = op(v, t[3].aggregate());
+        }
         return v;
       }
     };
@@ -98,7 +121,8 @@
           o = o[fields[i]];
         }
         return o;
-      }
+      },
+      aggregate: function(){ return '$' + shortName; }
     };
   }
 }
@@ -117,8 +141,8 @@ metric_unary_expression
   / metric_primary_expression
 
 metric_primary_expression
-  = reduce:reduce _ "(" _ event:event_expression _ ")" { event.reduce = reduce; event.source = input.substring(savedPos3, pos); return event; }
-  / value:number { return {value: function() { return value; }}; }
+  = reduce:reduce _ "(" _ event:event_expression _ ")" { event.reduce = reduce; event.source = input.substring(pos0, pos); return event; }
+  / value:number { return {value: function() { return value; }, aggregate: function() { return value; }}; }
   / "(" _ expression:metric_additive_expression _ ")" { return expression; }
 
 event_expression
@@ -137,7 +161,7 @@ event_filter_expression
 
 event_value_expression
   = type:type _ "(" _ value:event_additive_expression _ ")" { value.type = type; return value; }
-  / type:type { return {type: type, value: one, exists: noop, fields: noop}; }
+  / type:type { return {type: type, value: one, aggregate: one.aggregate, exists: noop, fields: noop}; }
 
 event_additive_expression
   = head:event_multiplicative_expression tail:(_ additive_operator _ event_additive_expression)* { return compoundValue(head, tail); }
@@ -147,11 +171,11 @@ event_multiplicative_expression
 
 event_unary_expression
   = event_primary_expression
-  / "-" _ unary:event_unary_expression { return {value: function(o) { return -unary.value(o); }, exists: unary.exists, fields: unary.fields}; }
+  / "-" _ unary:event_unary_expression { return {value: function(o) { return negate(unary.value(o)); }, aggregate: function() { return negate.aggregate(unary.value(o)) }, exists: unary.exists, fields: unary.fields}; }
 
 event_primary_expression
   = event_member_expression
-  / number:number { return {value: function() { return number; }, exists: noop, fields: noop}; }
+  / number:number { return {value: function() { return number; }, aggregate: function() { return number; }, exists: noop, fields: noop}; }
   / "(" _ expression:event_additive_expression _ ")" { return expression; }
 
 event_member_expression
