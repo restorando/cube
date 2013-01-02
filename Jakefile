@@ -21,20 +21,25 @@ namespace("db", function(){
         var metrics_db = db._dbs.metrics;
         metrics_db.collectionNames({namesOnly: true}, function(err, names){
           handle(err);
-          var metric_names = names.filter(function(name){ return /_metrics$/.test(name); }),
+          var metric_names = names.filter(function(name){ return /_metrics$/.test(name); }).sort(),
               remaining    = metric_names.length;
-          metric_names.forEach(function(name){
-              var segments = name.split('.'),
-                  collection_name = (segments.shift(), segments.join('.'));
-              metrics_db.collection(collection_name, function(err, collection){
+
+          function removeFromCollection(raw_name){
+            var segments = raw_name.split('.'),
+                collection_name = (segments.shift(), segments.join('.'));
+            metrics_db.collection(collection_name, function(err, collection){
+              handle(err);
+  console.log('Removing from ' + collection_name + '...');
+              collection.remove({'_id.t': {$lt: expiration_date }}, {safe: 1}, function(err, count){
                 handle(err);
-                collection.remove({'_id.t': {$lt: expiration_date }}, function(err){
-                  handle(err);
-                  console.log('Removing ' + collection_name.split('_').join(' ') + ' older than ' + expiration_date);
-                  if(!--remaining) db.close();
-                });
+                console.log('Removed ' + count + ' ' + collection_name.split('_').join(' ') + ' older than ' + expiration_date);
+
+                if(metric_names.length > 0) removeFromCollection(metric_names.shift());
+                else db.close();
               });
             });
+          };
+          removeFromCollection(metric_names.shift());
         })
       })
     });
