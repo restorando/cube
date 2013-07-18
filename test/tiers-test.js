@@ -395,7 +395,7 @@ suite.addBatch({
   },
 
   "month": {
-    topic: tiers[24192e5],
+    topic: tiers[2592e6],
     "has the key 2592e6": function(tier) {
       assert.strictEqual(tier.key, 2592e6);
     },
