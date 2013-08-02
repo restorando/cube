@@ -1,0 +1,20 @@
+#!/usr/bin/env node
+
+'use strict';
+
+var program = require('commander'),
+    cube = require("../");
+
+program
+  .option('-c, --config <file>', 'config file', null)
+  .parse(process.argv);
+
+var config = cube.config.load(program.config, 'evaluator'),
+    server = cube.server(config);
+
+server.register = function(db, endpoints) {
+  cube.evaluator.register(db, endpoints);
+  cube.visualizer.register(db, endpoints);
+};
+
+server.start();

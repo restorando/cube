@@ -1,0 +1,16 @@
+#!/usr/bin/env node
+
+'use strict';
+
+var program = require('commander'),
+    cube = require("../");
+
+program
+  .option('-c, --config <file>', 'config file', null)
+  .parse(process.argv);
+
+var config = cube.config.load(program.config, 'warmer'),
+    warmer = cube.warmer(config);
+
+
+warmer.start();
