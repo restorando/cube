@@ -347,49 +347,50 @@ suite.addBatch({
 
     "floor": {
       "rounds down to weeks": function(tier) {
-        assert.deepEqual(tier.floor(new Date(2013, 6, 1, 0, 0, 0)), new Date(2013, 6, 1, 0, 0, 0));
-        assert.deepEqual(tier.floor(new Date(2013, 6, 1, 0, 0, 1)), new Date(2013, 6, 1, 0, 0, 0));
-        assert.deepEqual(tier.floor(new Date(2013, 6, 3, 12, 30, 1)), new Date(2013, 6, 1, 0, 0, 0));
-        assert.deepEqual(tier.floor(new Date(2013, 6, 7, 23, 59, 59)), new Date(2013, 6, 1, 0, 0, 0));
-        assert.deepEqual(tier.floor(new Date(2013, 6, 8, 0, 0, 0)), new Date(2013, 6, 8, 0, 0, 0));
+        assert.deepEqual(tier.floor(utc(2011, 8, 4, 0, 0, 0)), utc(2011, 8, 4, 0, 0));
+        assert.deepEqual(tier.floor(utc(2011, 8, 4, 0, 0, 1)), utc(2011, 8, 4, 0, 0));
+        assert.deepEqual(tier.floor(utc(2011, 8, 4, 12, 21, 0)), utc(2011, 8, 4, 0, 0));
+        assert.deepEqual(tier.floor(utc(2011, 8, 10, 23, 59, 59)), utc(2011, 8, 4, 0, 0));
+        assert.deepEqual(tier.floor(utc(2011, 8, 11, 0, 0, 0)), utc(2011, 8, 11, 0, 0));
       },
       "does not modify the passed-in date": function(tier) {
-        var date = new Date(2013, 6, 2, 12, 21,0);
-        assert.deepEqual(tier.floor(date), new Date(2013, 6, 1, 0, 0, 0));
-        assert.deepEqual(date, new Date(2013, 6, 2, 12, 21, 0));
+        var date = utc(2011, 8, 4, 12, 21);
+        assert.deepEqual(tier.floor(date), utc(2011, 8, 4, 0, 0));
+        assert.deepEqual(date, utc(2011, 8, 4, 12, 21));
       }
     },
 
     "ceil": {
       "rounds up to weeks": function(tier) {
-        assert.deepEqual(tier.ceil(new Date(2013, 6, 1, 0, 0, 1)), new Date(2013, 6, 8, 0, 0, 0));
-        assert.deepEqual(tier.ceil(new Date(2013, 6, 3, 12, 21, 0)), new Date(2013, 6, 8, 0, 0, 0));
-        assert.deepEqual(tier.ceil(new Date(2013, 6, 7, 23, 59, 59)), new Date(2013, 6, 8, 0, 0, 0));
-        assert.deepEqual(tier.ceil(new Date(2013, 6, 8, 0, 0, 0)), new Date(2013, 6, 8, 0, 0, 0));
+        assert.deepEqual(tier.ceil(utc(2011, 8, 4, 0, 0, 0)), utc(2011, 8, 4, 0, 0));
+        assert.deepEqual(tier.ceil(utc(2011, 8, 4, 0, 0, 1)), utc(2011, 8, 11, 0, 0));
+        assert.deepEqual(tier.ceil(utc(2011, 8, 4, 12, 21, 0)), utc(2011, 8, 11, 0, 0));
+        assert.deepEqual(tier.ceil(utc(2011, 8, 10, 23, 59, 59)), utc(2011, 8, 11, 0, 0));
+        assert.deepEqual(tier.ceil(utc(2011, 8, 11, 0, 0, 0)), utc(2011, 8, 11, 0, 0));
       },
       "does not modified the specified date": function(tier) {
-        var date = new Date(2013, 6, 1, 12, 21, 0);
-        assert.deepEqual(tier.ceil(date), new Date(2013, 6, 8, 0, 0, 0));
-        assert.deepEqual(date, new Date(2013, 6, 1, 12, 21, 0));
+        var date = utc(2011, 8, 2, 12, 21, 0);
+        assert.deepEqual(tier.ceil(date), utc(2011, 8, 4, 0, 0));
+        assert.deepEqual(date, utc(2011, 8, 2, 12, 21));
       }
     },
 
     "step": {
       "increments time by one week": function(tier) {
-        var date = new Date(2013, 6, 1, 0, 0, 0);
-        assert.deepEqual(date = tier.step(date), new Date(2013, 6, 8, 0, 0, 0));
-        assert.deepEqual(date = tier.step(date), new Date(2013, 6, 15, 0, 0, 0));
-        assert.deepEqual(date = tier.step(date), new Date(2013, 6, 22, 0, 0, 0));
-        assert.deepEqual(date = tier.step(date), new Date(2013, 6, 29, 0, 0, 0));
-        assert.deepEqual(date = tier.step(date), new Date(2013, 7, 5, 0, 0, 0));
+        var date = utc(2011, 8, 4, 0, 0, 0);
+        assert.deepEqual(date = tier.step(date), utc(2011, 8, 11, 0, 0));
+        assert.deepEqual(date = tier.step(date), utc(2011, 8, 18, 0, 0));
+        assert.deepEqual(date = tier.step(date), utc(2011, 8, 25, 0, 0));
+        assert.deepEqual(date = tier.step(date), utc(2011, 9, 2, 0, 0));
+        assert.deepEqual(date = tier.step(date), utc(2011, 9, 9, 0, 0));
       },
       "does not round the specified date": function(tier) {
-        assert.deepEqual(tier.step(new Date(2013, 6, 1, 12, 21, 23)), new Date(2013, 6, 8, 12, 21, 23));
+        assert.deepEqual(tier.step(utc(2011, 8, 2, 12, 21, 23)), utc(2011, 8, 9, 12, 21, 23));
       },
       "does not modify the specified date": function(tier) {
-        var date = new Date(2013, 6, 1, 0, 0, 0);
-        assert.deepEqual(tier.step(date), new Date(2013, 6, 8, 0, 0, 0));
-        assert.deepEqual(date, new Date(2013, 6, 1, 0, 0, 0));
+        var date = utc(2011, 8, 4, 0, 0, 0);
+        assert.deepEqual(tier.step(date), utc(2011, 8, 11, 0, 0));
+        assert.deepEqual(date, utc(2011, 8, 4, 0, 0));
       }
     }
   },
@@ -402,56 +403,60 @@ suite.addBatch({
     "next is the one-day tier": function(tier) {
       assert.equal(tier.next, tiers[864e5]);
     },
-    "size is the amount of days in the month": function(tier) {
-      assert.strictEqual(tier.size(new Date(2013, 0, 12, 1, 30, 0)), 31);
-      assert.strictEqual(tier.size(new Date(2013, 1, 20, 15, 0, 0)), 28);
-      assert.strictEqual(tier.size(new Date(2013, 5, 8, 9, 0, 0)), 30);
+    "size is number of days in a month": function(tier) {
+      assert.strictEqual(tier.size(utc(2011, 0, 1)), 31);
+      assert.strictEqual(tier.size(utc(2011, 1, 1)), 28);
     },
 
     "floor": {
       "rounds down to months": function(tier) {
-        assert.deepEqual(tier.floor(new Date(2013, 6, 1, 0, 0, 1)), new Date(2013, 6, 1, 0, 0, 0));
-        assert.deepEqual(tier.floor(new Date(2013, 6, 15, 12, 30, 1)), new Date(2013, 6, 1, 0, 0, 0));
-        assert.deepEqual(tier.floor(new Date(2013, 6, 31, 23, 59, 59)), new Date(2013, 6, 1, 0, 0, 0));
-        assert.deepEqual(tier.floor(new Date(2013, 7, 1, 0, 0, 0)), new Date(2013, 7, 1, 0, 0, 0));
+        assert.deepEqual(tier.floor(utc(2011, 8, 1, 0, 0, 0)), utc(2011, 8, 1, 0, 0));
+        assert.deepEqual(tier.floor(utc(2011, 8, 1, 0, 0, 1)), utc(2011, 8, 1, 0, 0));
+        assert.deepEqual(tier.floor(utc(2011, 8, 4, 12, 21, 0)), utc(2011, 8, 1, 0, 0));
+        assert.deepEqual(tier.floor(utc(2011, 8, 29, 23, 59, 59)), utc(2011, 8, 1, 0, 0));
+        assert.deepEqual(tier.floor(utc(2011, 9, 1, 0, 0, 0)), utc(2011, 9, 1, 0, 0));
       },
       "does not modify the passed-in date": function(tier) {
-        var date = new Date(2013, 6, 2, 12, 21,0);
-        assert.deepEqual(tier.floor(date), new Date(2013, 6, 1, 0, 0, 0));
-        assert.deepEqual(date, new Date(2013, 6, 2, 12, 21, 0));
+        var date = utc(2011, 8, 4, 12, 21);
+        assert.deepEqual(tier.floor(date), utc(2011, 8, 1, 0, 0));
+        assert.deepEqual(date, utc(2011, 8, 4, 12, 21));
       }
     },
 
     "ceil": {
-      "rounds up to months": function(tier) {
-        assert.deepEqual(tier.ceil(new Date(2013, 6, 1, 0, 0, 1)), new Date(2013, 7, 1, 0, 0, 0));
-        assert.deepEqual(tier.ceil(new Date(2013, 6, 15, 12, 21, 0)), new Date(2013, 7, 1, 0, 0, 0));
-        assert.deepEqual(tier.ceil(new Date(2013, 6, 31, 23, 59, 59)), new Date(2013, 7, 1, 0, 0, 0));
-        assert.deepEqual(tier.ceil(new Date(2013, 7, 1, 0, 0, 0)), new Date(2013, 7, 1, 0, 0, 0));
+      "rounds up to weeks": function(tier) {
+        assert.deepEqual(tier.ceil(utc(2011, 8, 1, 0, 0, 0)), utc(2011, 8, 1, 0, 0));
+        assert.deepEqual(tier.ceil(utc(2011, 8, 1, 0, 0, 1)), utc(2011, 9, 1, 0, 0));
+        assert.deepEqual(tier.ceil(utc(2011, 8, 4, 12, 21, 0)), utc(2011, 9, 1, 0, 0));
+        assert.deepEqual(tier.ceil(utc(2011, 8, 29, 23, 59, 59)), utc(2011, 9, 1, 0, 0));
+        assert.deepEqual(tier.ceil(utc(2011, 9, 1, 0, 0, 0)), utc(2011, 9, 1, 0, 0));
       },
       "does not modified the specified date": function(tier) {
-        var date = new Date(2013, 6, 1, 12, 21, 0);
-        assert.deepEqual(tier.ceil(date), new Date(2013, 7, 1, 0, 0, 0));
-        assert.deepEqual(date, new Date(2013, 6, 1, 12, 21, 0));
+        var date = utc(2011, 8, 2, 12, 21, 0);
+        assert.deepEqual(tier.ceil(date), utc(2011, 9, 1, 0, 0));
+        assert.deepEqual(date, utc(2011, 8, 2, 12, 21));
       }
     },
 
     "step": {
       "increments time by one month": function(tier) {
-        var date = new Date(2013, 8, 1, 0, 0, 0);
-        assert.deepEqual(date = tier.step(date), new Date(2013, 9, 1, 0, 0, 0));
-        assert.deepEqual(date = tier.step(date), new Date(2013, 10, 1, 0, 0, 0));
-        assert.deepEqual(date = tier.step(date), new Date(2013, 11, 1, 0, 0, 0));
-        assert.deepEqual(date = tier.step(date), new Date(2014, 0, 1, 0, 0, 0));
-        assert.deepEqual(date = tier.step(date), new Date(2014, 1, 1, 0, 0, 0));
+        var date = utc(2011, 8, 1, 0, 0, 0);
+        assert.deepEqual(date = tier.step(date), utc(2011, 9, 1, 0, 0));
+        assert.deepEqual(date = tier.step(date), utc(2011, 10, 1, 0, 0));
+        assert.deepEqual(date = tier.step(date), utc(2011, 11, 1, 0, 0));
+        assert.deepEqual(date = tier.step(date), utc(2012, 0, 1, 0, 0));
+        assert.deepEqual(date = tier.step(date), utc(2012, 1, 1, 0, 0));
+      },
+      "does not round the specified date": function(tier) {
+        assert.deepEqual(tier.step(utc(2011, 1, 2, 12, 21, 23)), utc(2011, 2, 2, 12, 21, 23));
+        assert.deepEqual(tier.step(utc(2011, 8, 2, 12, 21, 23)), utc(2011, 9, 2, 12, 21, 23));
       },
       "does not modify the specified date": function(tier) {
-        var date = new Date(2013, 6, 1, 0, 0, 0);
-        assert.deepEqual(tier.step(date), new Date(2013, 7, 1, 0, 0, 0));
-        assert.deepEqual(date, new Date(2013, 6, 1, 0, 0, 0));
+        var date = utc(2011, 8, 1, 0, 0, 0);
+        assert.deepEqual(tier.step(date), utc(2011, 9, 1, 0, 0));
+        assert.deepEqual(date, utc(2011, 8, 1, 0, 0));
       }
     }
-
   }
 
 });
